@@ -34,7 +34,7 @@ func main() {
 	mux.HandleFunc("/fs/upload", handlers.UploadHandler(rootDir))
 	mux.HandleFunc("/fs/mkdir", handlers.MkdirHandler(rootDir))
 	mux.HandleFunc("/fs/rename", notImplemented)
-	mux.HandleFunc("/fs/delete", notImplemented)
+	mux.HandleFunc("/fs/delete", handlers.DeleteHandler(rootDir))
 
 	server := &http.Server{
 		Addr:         addr,
