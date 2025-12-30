@@ -33,7 +33,7 @@ func main() {
 	mux.HandleFunc("/fs/download", handlers.DownloadHandler(rootDir))
 	mux.HandleFunc("/fs/upload", handlers.UploadHandler(rootDir))
 	mux.HandleFunc("/fs/mkdir", handlers.MkdirHandler(rootDir))
-	mux.HandleFunc("/fs/rename", notImplemented)
+	mux.HandleFunc("/fs/rename", handlers.RenameHandler(rootDir))
 	mux.HandleFunc("/fs/delete", handlers.DeleteHandler(rootDir))
 
 	server := &http.Server{
@@ -46,12 +46,6 @@ func main() {
 
 	log.Printf("Starting explorer API on %s (root=%s)", addr, rootDir)
 	log.Fatal(server.ListenAndServe())
-}
-
-
-// placeholder response until implementation
-func notImplemented(w http.ResponseWriter, _ *http.Request) {
-	http.Error(w, "not implemented", http.StatusNotImplemented)
 }
 
 func loggingMiddleware(next http.Handler) http.Handler {
