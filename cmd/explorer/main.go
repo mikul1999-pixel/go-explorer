@@ -31,7 +31,7 @@ func main() {
 	// API routes
 	mux.HandleFunc("/fs/list", handlers.ListHandler(rootDir))
 	mux.HandleFunc("/fs/download", handlers.DownloadHandler(rootDir))
-	mux.HandleFunc("/fs/upload", notImplemented)
+	mux.HandleFunc("/fs/upload", handlers.UploadHandler(rootDir))
 	mux.HandleFunc("/fs/mkdir", notImplemented)
 	mux.HandleFunc("/fs/rename", notImplemented)
 	mux.HandleFunc("/fs/delete", notImplemented)
@@ -49,7 +49,7 @@ func main() {
 }
 
 
-
+// placeholder response until implementation
 func notImplemented(w http.ResponseWriter, _ *http.Request) {
 	http.Error(w, "not implemented", http.StatusNotImplemented)
 }
