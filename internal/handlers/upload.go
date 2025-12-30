@@ -85,6 +85,6 @@ func UploadHandler(root string) http.HandlerFunc {
 		}
 
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte("upload successful"))
+		w.Write([]byte("upload successful\n"))
 	}
 }

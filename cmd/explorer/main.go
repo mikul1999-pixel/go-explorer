@@ -32,7 +32,7 @@ func main() {
 	mux.HandleFunc("/fs/list", handlers.ListHandler(rootDir))
 	mux.HandleFunc("/fs/download", handlers.DownloadHandler(rootDir))
 	mux.HandleFunc("/fs/upload", handlers.UploadHandler(rootDir))
-	mux.HandleFunc("/fs/mkdir", notImplemented)
+	mux.HandleFunc("/fs/mkdir", handlers.MkdirHandler(rootDir))
 	mux.HandleFunc("/fs/rename", notImplemented)
 	mux.HandleFunc("/fs/delete", notImplemented)
 

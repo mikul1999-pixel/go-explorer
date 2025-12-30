@@ -1,0 +1,17 @@
+# binaries
+*.exe
+*.exe~
+
+# build
+*.test
+*.out
+/bin/
+/build/
+/dist/
+
+# workspace files
+go.work
+go.work.sum
+
+# environment
+.env
