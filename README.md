@@ -1,6 +1,7 @@
 # go-explorer
 
-A small, lightweight HTTP API for managing files on your disk remotely.
+A small, lightweight HTTP API for managing files on your disk remotely. Meant to use as a backup access method or as a building block for a custom UI.
+
 
 ## Features
 
@@ -16,8 +17,8 @@ A small, lightweight HTTP API for managing files on your disk remotely.
 - Root directory sandboxing (no path escape)
 - Overwrite is forbidden and will return with an error
 - Includes pluggable auth middleware (headers or shared secret)
-    - Assumes the api will be behind a valid IDP method
-    - Not a replacement for third-party authentication
+    - Assumes the api will be behind a trusted identity-aware proxy method
+    - Not a replacement for IDP authentication
     - Can be enabled or disabled in ```.env```
 
 
@@ -87,12 +88,15 @@ curl "http://localhost:3030/healthz"
 If Auth is enabled, include your header in the request ```curl -H <auth> -X <Method> <Endpoint>```
 
 ## Appendix
+**Note:** This is a personal project. Features and functionality may change.
+
+<br>
 
 ### Authentication
-Auth middleware is designed to be an **optional** step to confirm user passed a stronger validation method.
+Auth middleware is designed to be an **optional** step to confirm that user passed a stronger validation method.
 
 #### Header-based auth (recommended)
-Used with identity-aware proxies (Cloudflare Access, Authentik, etc).
+Used with identity-aware proxies (Cloudflare Access, Authentik, etc). Only accept requests from trusted headers
 ```bash
 AUTH_MODE=header
 AUTH_HEADER=Cf-Access-Authenticated-User-Email
@@ -100,6 +104,7 @@ AUTH_ALLOWED=me@example.com,admin@example.com
 ```
 
 #### Shared secret auth
+Used with a strong, random key. Only recommended when deployed on a Private Network
 ```bash
 AUTH_MODE=shared
 AUTH_SHARED_HEADER=X-Explorer-Key
@@ -107,6 +112,7 @@ AUTH_SHARED_KEY=supersecret_uuid
 ```
 
 #### Disable auth
+No auth enforcement, any request will pass. Only use while temporarily testing on your network
 ```bash
 AUTH_MODE=
 ```
