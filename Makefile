@@ -1,7 +1,14 @@
+ENV_FILE := .env
+
+ifneq (,$(wildcard $(ENV_FILE)))
+	include $(ENV_FILE)
+	export
+endif
+
 APP_NAME := go-explorer
 CMD_DIR := ./cmd/explorer
 PORT := 3030
-ROOT_DIR := /tmp/go-explorer-data
+ROOT_DIR := /data
 
 .PHONY: run test build clean
 

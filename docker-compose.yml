@@ -1,0 +1,12 @@
+services:
+  explorer:
+    image: go-explorer
+    environment:
+      ROOT_DIR: /data
+      AUTH_MODE: $(AUTH_MODE)
+      AUTH_HEADER: $(AUTH_HEADER)
+      AUTH_ALLOWED: $(AUTH_ALLOWED)
+    volumes:
+      - /mnt/storage:/data
+    ports:
+      - "3030:3030"

@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/mikul1999-pixel/go-explorer/internal/auth"
 	"github.com/mikul1999-pixel/go-explorer/internal/handlers"
 )
 
@@ -20,21 +21,30 @@ func main() {
 		addr = ":3030"
 	}
 
+	// Load auth config
+	authCfg := auth.LoadConfig()
+
+	// Root mux
 	mux := http.NewServeMux()
 
-	// Health check
+	// Public route
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("ok"))
 	})
 
-	// API routes
-	mux.HandleFunc("/fs/list", handlers.ListHandler(rootDir))
-	mux.HandleFunc("/fs/download", handlers.DownloadHandler(rootDir))
-	mux.HandleFunc("/fs/upload", handlers.UploadHandler(rootDir))
-	mux.HandleFunc("/fs/mkdir", handlers.MkdirHandler(rootDir))
-	mux.HandleFunc("/fs/rename", handlers.RenameHandler(rootDir))
-	mux.HandleFunc("/fs/delete", handlers.DeleteHandler(rootDir))
+	// FS mux (protected)
+	fsMux := http.NewServeMux()
+	fsMux.HandleFunc("/fs/list", handlers.ListHandler(rootDir))
+	fsMux.HandleFunc("/fs/download", handlers.DownloadHandler(rootDir))
+	fsMux.HandleFunc("/fs/upload", handlers.UploadHandler(rootDir))
+	fsMux.HandleFunc("/fs/mkdir", handlers.MkdirHandler(rootDir))
+	fsMux.HandleFunc("/fs/rename", handlers.RenameHandler(rootDir))
+	fsMux.HandleFunc("/fs/delete", handlers.DeleteHandler(rootDir))
+
+	// Wrap FS routes with auth
+	protectedFS := auth.Middleware(authCfg)(fsMux)
+	mux.Handle("/fs/", protectedFS)
 
 	server := &http.Server{
 		Addr:         addr,
